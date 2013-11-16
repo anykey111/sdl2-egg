@@ -28,50 +28,9 @@
    sdl-gl-set-swap-interval sdl-gl-get-swap-interval sdl-gl-swap-window
    sdl-gl-get-current-context sdl-gl-get-current-window
    sdl-gl-bind-texture sdl-gl-unbind-texture
-   sdl-load-bmp sdl-free-surface sdl-destroy-texture
-   SDL-WINDOWPOS-CENTERED
-   SDL-WINDOWPOS-UNDEFINED
-   SDL-WINDOW-FULLSCREEN
-   SDL-WINDOW-FULLSCREEN-DESKTOP
-   SDL-WINDOW-OPENGL
-   SDL-WINDOW-SHOWN
-   SDL-WINDOW-HIDDEN
-   SDL-WINDOW-BORDERLESS
-   SDL-WINDOW-RESIZABLE
-   SDL-WINDOW-MINIMIZED
-   SDL-WINDOW-MAXIMIZED
-   SDL-WINDOW-INPUT-GRABBED
-   SDL-WINDOW-INPUT-FOCUS
-   SDL-WINDOW-MOUSE-FOCUS
-   SDL-WINDOW-FOREIGN
-   ;fixme:SDL-WINDOW-ALLOW-HIGHDPI
-   SDL-GL-RED-SIZE
-   SDL-GL-GREEN-SIZE
-   SDL-GL-BLUE-SIZE
-   SDL-GL-ALPHA-SIZE
-   SDL-GL-BUFFER-SIZE
-   SDL-GL-DOUBLEBUFFER
-   SDL-GL-DEPTH-SIZE
-   SDL-GL-STENCIL-SIZE
-   SDL-GL-ACCUM-RED-SIZE
-   SDL-GL-ACCUM-GREEN-SIZE
-   SDL-GL-ACCUM-BLUE-SIZE
-   SDL-GL-ACCUM-ALPHA-SIZE
-   SDL-GL-STEREO
-   SDL-GL-MULTISAMPLEBUFFERS
-   SDL-GL-MULTISAMPLESAMPLES
-   SDL-GL-ACCELERATED-VISUAL
-   SDL-GL-RETAINED-BACKING
-   SDL-GL-CONTEXT-MAJOR-VERSION
-   SDL-GL-CONTEXT-MINOR-VERSION
-   SDL-GL-CONTEXT-EGL
-   SDL-GL-CONTEXT-FLAGS
-   SDL-GL-CONTEXT-PROFILE-MASK
-   SDL-GL-SHARE-WITH-CURRENT-CONTEXT
-   SDL-WINDOW-FULLSCREEN
-   SDL-WINDOW-FULLSCREEN-DESKTOP)
+   sdl-load-bmp sdl-free-surface sdl-destroy-texture)
   (import scheme chicken foreign)
-  (use sdl2-basics c-struct srfi-1 lolevel)
+  (use sdl2-basics sdl2-defs c-struct srfi-1 lolevel)
 
 (foreign-declare "#include <SDL2/SDL_video.h>")
 (foreign-declare "#include <SDL2/SDL_render.h>")
@@ -353,45 +312,11 @@
    (c-struct->pointer texture sdl-texture))
   (c-struct-pointer-set! texture #f sdl-texture))
 
-(define SDL-WINDOWPOS-CENTERED (foreign-value "SDL_WINDOWPOS_CENTERED" int))
-(define SDL-WINDOWPOS-UNDEFINED (foreign-value "SDL_WINDOWPOS_UNDEFINED" int))
-(define SDL-WINDOW-FULLSCREEN (foreign-value "SDL_WINDOW_FULLSCREEN" int))
-(define SDL-WINDOW-FULLSCREEN-DESKTOP (foreign-value "SDL_WINDOW_FULLSCREEN_DESKTOP" int))
-(define SDL-WINDOW-OPENGL (foreign-value "SDL_WINDOW_OPENGL" int))
-(define SDL-WINDOW-SHOWN (foreign-value "SDL_WINDOW_SHOWN" int))
-(define SDL-WINDOW-HIDDEN (foreign-value "SDL_WINDOW_HIDDEN" int))
-(define SDL-WINDOW-BORDERLESS (foreign-value "SDL_WINDOW_BORDERLESS" int))
-(define SDL-WINDOW-RESIZABLE (foreign-value "SDL_WINDOW_RESIZABLE" int))
-(define SDL-WINDOW-MINIMIZED (foreign-value "SDL_WINDOW_MINIMIZED" int))
-(define SDL-WINDOW-MAXIMIZED (foreign-value "SDL_WINDOW_MAXIMIZED" int))
-(define SDL-WINDOW-INPUT-GRABBED (foreign-value "SDL_WINDOW_INPUT_GRABBED" int))
-(define SDL-WINDOW-INPUT-FOCUS (foreign-value "SDL_WINDOW_INPUT_FOCUS" int))
-(define SDL-WINDOW-MOUSE-FOCUS (foreign-value "SDL_WINDOW_MOUSE_FOCUS" int))
-(define SDL-WINDOW-FOREIGN (foreign-value "SDL_WINDOW_FOREIGN" int))
-;fixme:(define SDL-WINDOW-ALLOW-HIGHDPI (foreign-value "SDL_WINDOW_ALLOW_HIGHDPI" int))
-(define SDL-GL-RED-SIZE (foreign-value "SDL_GL_RED_SIZE" int))
-(define SDL-GL-GREEN-SIZE (foreign-value "SDL_GL_GREEN_SIZE" int))
-(define SDL-GL-BLUE-SIZE (foreign-value "SDL_GL_BLUE_SIZE" int))
-(define SDL-GL-ALPHA-SIZE (foreign-value "SDL_GL_ALPHA_SIZE" int))
-(define SDL-GL-BUFFER-SIZE (foreign-value "SDL_GL_BUFFER_SIZE" int))
-(define SDL-GL-DOUBLEBUFFER (foreign-value "SDL_GL_DOUBLEBUFFER" int))
-(define SDL-GL-DEPTH-SIZE (foreign-value "SDL_GL_DEPTH_SIZE" int))
-(define SDL-GL-STENCIL-SIZE (foreign-value "SDL_GL_STENCIL_SIZE" int))
-(define SDL-GL-ACCUM-RED-SIZE (foreign-value "SDL_GL_ACCUM_RED_SIZE" int))
-(define SDL-GL-ACCUM-GREEN-SIZE (foreign-value "SDL_GL_ACCUM_GREEN_SIZE" int))
-(define SDL-GL-ACCUM-BLUE-SIZE (foreign-value "SDL_GL_ACCUM_BLUE_SIZE" int))
-(define SDL-GL-ACCUM-ALPHA-SIZE (foreign-value "SDL_GL_ACCUM_ALPHA_SIZE" int))
-(define SDL-GL-STEREO (foreign-value "SDL_GL_STEREO" int))
-(define SDL-GL-MULTISAMPLEBUFFERS (foreign-value "SDL_GL_MULTISAMPLEBUFFERS" int))
-(define SDL-GL-MULTISAMPLESAMPLES (foreign-value "SDL_GL_MULTISAMPLESAMPLES" int))
-(define SDL-GL-ACCELERATED-VISUAL (foreign-value "SDL_GL_ACCELERATED_VISUAL" int))
-(define SDL-GL-RETAINED-BACKING (foreign-value "SDL_GL_RETAINED_BACKING" int))
-(define SDL-GL-CONTEXT-MAJOR-VERSION (foreign-value "SDL_GL_CONTEXT_MAJOR_VERSION" int))
-(define SDL-GL-CONTEXT-MINOR-VERSION (foreign-value "SDL_GL_CONTEXT_MINOR_VERSION" int))
-(define SDL-GL-CONTEXT-EGL (foreign-value "SDL_GL_CONTEXT_EGL" int))
-(define SDL-GL-CONTEXT-FLAGS (foreign-value "SDL_GL_CONTEXT_FLAGS" int))
-(define SDL-GL-CONTEXT-PROFILE-MASK (foreign-value "SDL_GL_CONTEXT_PROFILE_MASK" int))
-(define SDL-GL-SHARE-WITH-CURRENT-CONTEXT (foreign-value "SDL_GL_SHARE_WITH_CURRENT_CONTEXT" int))
-(define SDL-WINDOW-FULLSCREEN (foreign-value "SDL_WINDOW_FULLSCREEN" int))
-(define SDL-WINDOW-FULLSCREEN-DESKTOP (foreign-value "SDL_WINDOW_FULLSCREEN_DESKTOP" int))
+(define (sdl-create-texture renderer format access w h)
+  (let ((texture ((foreign-lambda SDL-Texture "SDL_CreateTexture" SDL-Renderer int int int int)
+                  (c-struct->pointer renderer sdl-renderer) format access w h)))
+    (if texture
+      (pointer->c-struct texture sdl-texture)
+      (error "SDL_CreateTexture" (sdl-get-error)))))
+
 )

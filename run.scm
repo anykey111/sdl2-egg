@@ -1,4 +1,4 @@
-(use sdl2-basics sdl2-events sdl2-video sdl2-ttf)
+(use sdl2-defs sdl2-basics sdl2-events sdl2-video sdl2-ttf)
 
 (define running  (make-parameter #t))
 (define window)

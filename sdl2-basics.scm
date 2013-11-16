@@ -4,42 +4,9 @@
    sdl-get-error sdl-set-error sdl-clear-error
    sdl-log sdl-log-message sdl-log-resert-priorities sdl-log-set-all-priority
    sdl-log-get-priority sdl-log-set-priority
-   sdl-version sdl-version-major sdl-version-minor sdl-version-patch
-   SDL-INIT-AUDIO
-   SDL-INIT-VIDEO
-   SDL-INIT-TIMER
-   SDL-INIT-JOYSTICK
-   SDL-INIT-HAPTIC
-   SDL-INIT-GAMECONTROLLER
-   SDL-INIT-EVENTS
-   SDL-INIT-EVERYTHING
-   SDL-INIT-NOPARACHUTE
-   SDL-HINT-DEFAULT
-   SDL-HINT-NORMAL
-   SDL-HINT-OVERRIDE
-   SDL-HINT-FRAMEBUFFER-ACCELERATION
-   SDL-HINT-IDLE_TIMER-DISABLED
-   SDL-HINT-ORIENTATIONS
-   SDL-HINT-RENDER-DRIVER
-   SDL-HINT-RENDER-OPENGL-SHADERS
-   SDL-HINT-RENDER-SCALE-QUALITY
-   SDL-HINT-RENDER-VSYNC
-   SDL-LOG-CATEGORY-APPLICATION
-   SDL-LOG-CATEGORY-ERROR
-   SDL-LOG-CATEGORY-SYSTEM
-   SDL-LOG-CATEGORY-AUDIO
-   SDL-LOG-CATEGORY-VIDEO
-   SDL-LOG-CATEGORY-RENDER
-   SDL-LOG-CATEGORY-INPUT
-   SDL-LOG-CATEGORY-CUSTOM
-   SDL-LOG-PRIORITY-VERBOSE
-   SDL-LOG-PRIORITY-DEBUG
-   SDL-LOG-PRIORITY-INFO
-   SDL-LOG-PRIORITY-WARN
-   SDL-LOG-PRIORITY-ERROR
-   SDL-LOG-PRIORITY-CRITICAL)
+   sdl-version sdl-version-major sdl-version-minor sdl-version-patch)
   (import scheme chicken foreign)
-  (use c-struct data-structures extras)
+  (use c-struct data-structures extras sdl2-defs)
 
 (foreign-declare "#include <SDL2/SDL.h>")
 (foreign-declare "#include <SDL2/SDL_hints.h>")
@@ -148,37 +115,4 @@
      (c-struct->pointer version sdl-version))
     version))
 
-(define SDL-INIT-AUDIO (foreign-value "SDL_INIT_AUDIO" int))
-(define SDL-INIT-VIDEO (foreign-value "SDL_INIT_VIDEO" int))
-(define SDL-INIT-TIMER (foreign-value "SDL_INIT_TIMER" int))
-(define SDL-INIT-JOYSTICK (foreign-value "SDL_INIT_JOYSTICK" int))
-(define SDL-INIT-HAPTIC (foreign-value "SDL_INIT_HAPTIC" int))
-(define SDL-INIT-GAMECONTROLLER (foreign-value "SDL_INIT_GAMECONTROLLER" int))
-(define SDL-INIT-EVENTS (foreign-value "SDL_INIT_EVENTS" int))
-(define SDL-INIT-EVERYTHING (foreign-value "SDL_INIT_EVERYTHING" int))
-(define SDL-INIT-NOPARACHUTE (foreign-value "SDL_INIT_NOPARACHUTE" int))
-(define SDL-HINT-DEFAULT (foreign-value "SDL_HINT_DEFAULT" int))
-(define SDL-HINT-NORMAL (foreign-value "SDL_HINT_NORMAL" int))
-(define SDL-HINT-OVERRIDE (foreign-value "SDL_HINT_OVERRIDE" int))
-(define SDL-HINT-FRAMEBUFFER-ACCELERATION (foreign-value "SDL_HINT_FRAMEBUFFER_ACCELERATION" int))
-(define SDL-HINT-IDLE_TIMER-DISABLED (foreign-value "SDL_HINT_IDLE_TIMER_DISABLED" int))
-(define SDL-HINT-ORIENTATIONS (foreign-value "SDL_HINT_ORIENTATIONS" int))
-(define SDL-HINT-RENDER-DRIVER (foreign-value "SDL_HINT_RENDER_DRIVER" int))
-(define SDL-HINT-RENDER-OPENGL-SHADERS (foreign-value "SDL_HINT_RENDER_OPENGL_SHADERS" int))
-(define SDL-HINT-RENDER-SCALE-QUALITY (foreign-value "SDL_HINT_RENDER_SCALE_QUALITY" int))
-(define SDL-HINT-RENDER-VSYNC (foreign-value "SDL_HINT_RENDER_VSYNC" int))
-(define SDL-LOG-CATEGORY-APPLICATION (foreign-value "SDL_LOG_CATEGORY_APPLICATION" int))
-(define SDL-LOG-CATEGORY-ERROR (foreign-value "SDL_LOG_CATEGORY_ERROR" int))
-(define SDL-LOG-CATEGORY-SYSTEM (foreign-value "SDL_LOG_CATEGORY_SYSTEM" int))
-(define SDL-LOG-CATEGORY-AUDIO (foreign-value "SDL_LOG_CATEGORY_AUDIO" int))
-(define SDL-LOG-CATEGORY-VIDEO (foreign-value "SDL_LOG_CATEGORY_VIDEO" int))
-(define SDL-LOG-CATEGORY-RENDER (foreign-value "SDL_LOG_CATEGORY_RENDER" int))
-(define SDL-LOG-CATEGORY-INPUT (foreign-value "SDL_LOG_CATEGORY_INPUT" int))
-(define SDL-LOG-CATEGORY-CUSTOM (foreign-value "SDL_LOG_CATEGORY_CUSTOM" int))
-(define SDL-LOG-PRIORITY-VERBOSE (foreign-value "SDL_LOG_PRIORITY_VERBOSE" int))
-(define SDL-LOG-PRIORITY-DEBUG (foreign-value "SDL_LOG_PRIORITY_DEBUG" int))
-(define SDL-LOG-PRIORITY-INFO (foreign-value "SDL_LOG_PRIORITY_INFO" int))
-(define SDL-LOG-PRIORITY-WARN (foreign-value "SDL_LOG_PRIORITY_WARN" int))
-(define SDL-LOG-PRIORITY-ERROR (foreign-value "SDL_LOG_PRIORITY_ERROR" int))
-(define SDL-LOG-PRIORITY-CRITICAL (foreign-value "SDL_LOG_PRIORITY_CRITICAL" int))
 )

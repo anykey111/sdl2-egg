@@ -1,10 +1,15 @@
-all: c-struct sdl2-basics sdl2-timer sdl2-events sdl2-video sdl2-ttf
+all: c-struct sdl2-defs sdl2-basics sdl2-timer sdl2-events sdl2-video sdl2-ttf
+
+sdl2-defs: sdl2-defs.scm
+	csi -s gendefs.scm > sdl2-defs.scm
+	csc -s sdl2-defs.scm -emit-all-import-libraries
+	csc -s sdl2-defs.import.scm
 
 sdl2-basics: sdl2-basics.scm
-	csc -s sdl2-basics.scm -emit-all-import-libraries -lSDL2 
+	csc -s sdl2-basics.scm -emit-all-import-libraries -lSDL2
 	csc -s sdl2-basics.import.scm
 
-sdl2-timer: sdl2-timer.scm 
+sdl2-timer: sdl2-timer.scm
 	csc -s sdl2-timer.scm -emit-all-import-libraries -lSDL2
 	csc -s sdl2-timer.import.scm
 
@@ -13,7 +18,7 @@ sdl2-events: sdl2-events.scm
 	csc -s sdl2-events.import.scm
 
 sdl2-video: sdl2-video.scm
-	csc -s -S sdl2-video.scm -emit-all-import-libraries -lSDL2
+	csc -k -s -S sdl2-video.scm -emit-all-import-libraries -lSDL2
 	csc -s sdl2-video.import.scm
 
 sdl2-ttf: sdl2-ttf.scm

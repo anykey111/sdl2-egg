@@ -1,10 +1,10 @@
-sdl.c
 sdl2-timer.scm
 sdl2-timer.ffi.c
 sdl2-basics.scm
 sdl2-video.scm
 Makefile
-sdl2.scm
+run.scm
 sdl2-events.scm
 c-struct.scm
 sdl2-ttf.scm
+sdl2-defs.scm
