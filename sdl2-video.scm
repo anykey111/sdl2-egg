@@ -23,6 +23,7 @@
    sdl-enable-screensaver
    sdl-video-init
    sdl-video-quit
+   sdl-gl-set-attribute sdl-gl-get-attribute
    SDL-WINDOWPOS-CENTERED
    SDL-WINDOWPOS-UNDEFINED
    SDL-WINDOW-FULLSCREEN
@@ -255,6 +256,19 @@
 
 (define sdl-video-quit
   (foreign-lambda void "SDL_VideoQuit"))
+
+(define (sdl-gl-get-attribute attr value)
+  (let-location ((value int value))
+    (let ((err ((foreign-lambda int "SDL_GL_GetAttribute" int (c-pointer int))
+                attr (location value))))
+      (if (zero? err)
+        value
+        (error "SDL_GL_GetAttribute" (sdl-get-error))))))
+
+(define (sdl-gl-set-attribute attr value)
+  (let ((err ((foreign-lambda int "SDL_GL_SetAttribute" int int) attr value)))
+    (or (zero? err)
+        (error "SDL_GL_SetAttribute" (sdl-get-error)))))
 
 (define SDL-WINDOWPOS-CENTERED (foreign-value "SDL_WINDOWPOS_CENTERED" int))
 (define SDL-WINDOWPOS-UNDEFINED (foreign-value "SDL_WINDOWPOS_UNDEFINED" int))

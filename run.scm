@@ -47,6 +47,8 @@
   (ttf-init)
   (set! font (ttf-open-font "lucon.ttf" 20))
   (set! window (sdl-create-window "sdl2 test" 100 100 640 480 SDL-WINDOW-OPENGL))
+  (sdl-gl-set-attribute SDL-GL-CONTEXT-MAJOR-VERSION 3)
+  (sdl-gl-set-attribute SDL-GL-CONTEXT-MINOR-VERSION 2)
   (set! render (sdl-create-renderer window))
   (set! font-surface (ttf-render-text-solid font "FIGA" (make-sdl-color 0 255 0 255)))
   (set! font-texture (sdl-create-texture-from-surface render font-surface))
