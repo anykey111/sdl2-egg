@@ -27,6 +27,8 @@
    sdl-gl-create-context sdl-gl-delete-context sdl-gl-make-current
    sdl-gl-set-swap-interval sdl-gl-get-swap-interval sdl-gl-swap-window
    sdl-gl-get-current-context sdl-gl-get-current-window
+   sdl-gl-bind-texture sdl-gl-unbind-texture
+   sdl-load-bmp sdl-free-surface sdl-destroy-texture
    SDL-WINDOWPOS-CENTERED
    SDL-WINDOWPOS-UNDEFINED
    SDL-WINDOW-FULLSCREEN
@@ -319,6 +321,37 @@
       (pointer->c-struct glwindow sdl-window)
       (error "SDL_GL_GetCurrentWindow" (sdl-get-error)))))
 
+(define (sdl-gl-bind-texture texture texw texh)
+  (let-location ((w float (or texw 0.))
+                 (h float (or texh 0.)))
+    (let ((err ((foreign-lambda int "SDL_GL_BindTexture" SDL-Texture (c-pointer float) (c-pointer float))
+                (c-struct->pointer texture sdl-texture)
+                (and texw (location w))
+                (and texh (location h)))))
+      (or (zero? err)
+          (error "SDL_GL_BindTexture" (sdl-get-error))))))
+
+(define (sdl-gl-unbind-texture texture)
+  (let ((err ((foreign-lambda int "SDL_GL_UnbindTexture" SDL-Texture)
+              (c-struct->pointer texture sdl-texture))))
+    (or (zero? err)
+        (error "SDL_GL_UnbindTexture" (sdl-get-error)))))
+
+(define (sdl-load-bmp file)
+  (let ((surface ((foreign-lambda SDL-Surface "SDL_LoadBMP" c-string) file)))
+    (if surface
+      (pointer->c-struct surface sdl-surface)
+      (error "SDL_LoadBMP" (sdl-get-error)))))
+
+(define (sdl-free-surface surface)
+  ((foreign-lambda void "SDL_FreeSurface" SDL-Surface)
+   (c-struct->pointer surface sdl-surface))
+  (c-struct-pointer-set! surface #f sdl-surface))
+
+(define (sdl-destroy-texture texture)
+  ((foreign-lambda void "SDL_DestroyTexture" SDL-Texture)
+   (c-struct->pointer texture sdl-texture))
+  (c-struct-pointer-set! texture #f sdl-texture))
 
 (define SDL-WINDOWPOS-CENTERED (foreign-value "SDL_WINDOWPOS_CENTERED" int))
 (define SDL-WINDOWPOS-UNDEFINED (foreign-value "SDL_WINDOWPOS_UNDEFINED" int))
