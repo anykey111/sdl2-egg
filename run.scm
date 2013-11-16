@@ -51,6 +51,8 @@
       (sdl-gl-make-current glwindow glcontext)
       (sdl-gl-set-swap-interval 1)
       (sdl-gl-get-swap-interval)
+      (print "glwindow:" (sdl-gl-get-current-window))
+      (print "glcontext:" (sdl-gl-get-current-context))
       (let loop ((e (sdl-poll-event)))
         (sdl-gl-swap-window glwindow)
         (unless (and e (= SDL-QUIT (sdl-event-type e)))

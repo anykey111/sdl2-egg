@@ -26,6 +26,7 @@
    sdl-gl-set-attribute sdl-gl-get-attribute
    sdl-gl-create-context sdl-gl-delete-context sdl-gl-make-current
    sdl-gl-set-swap-interval sdl-gl-get-swap-interval sdl-gl-swap-window
+   sdl-gl-get-current-context sdl-gl-get-current-window
    SDL-WINDOWPOS-CENTERED
    SDL-WINDOWPOS-UNDEFINED
    SDL-WINDOW-FULLSCREEN
@@ -305,6 +306,19 @@
 (define (sdl-gl-swap-window window)
   ((foreign-lambda void "SDL_GL_SwapWindow" SDL-Window)
    (c-struct->pointer window sdl-window)))
+
+(define (sdl-gl-get-current-context)
+  (let ((glcontext ((foreign-lambda SDL-GLContext "SDL_GL_GetCurrentContext"))))
+    (if glcontext
+      (pointer->c-struct glcontext sdl-glcontext)
+      (error "SDL_GL_GetCurrentContext" (sdl-get-error)))))
+
+(define (sdl-gl-get-current-window)
+  (let ((glwindow ((foreign-lambda SDL-Window "SDL_GL_GetCurrentWindow"))))
+    (if glwindow
+      (pointer->c-struct glwindow sdl-window)
+      (error "SDL_GL_GetCurrentWindow" (sdl-get-error)))))
+
 
 (define SDL-WINDOWPOS-CENTERED (foreign-value "SDL_WINDOWPOS_CENTERED" int))
 (define SDL-WINDOWPOS-UNDEFINED (foreign-value "SDL_WINDOWPOS_UNDEFINED" int))
