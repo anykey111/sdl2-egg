@@ -24,6 +24,8 @@
    sdl-video-init
    sdl-video-quit
    sdl-gl-set-attribute sdl-gl-get-attribute
+   sdl-gl-create-context sdl-gl-delete-context sdl-gl-make-current
+   sdl-gl-set-swap-interval sdl-gl-get-swap-interval sdl-gl-swap-window
    SDL-WINDOWPOS-CENTERED
    SDL-WINDOWPOS-UNDEFINED
    SDL-WINDOW-FULLSCREEN
@@ -82,6 +84,7 @@
 (define-c-struct (sdl-window "struct SDL_Window*"))
 (define-c-struct (sdl-renderer "struct SDL_Renderer*"))
 (define-c-struct (sdl-texture "struct SDL_Texture*"))
+(define-c-struct (sdl-glcontext "struct SDL_GLContext*"))
 (define-c-struct (sdl-surface "SDL_Surface"))
 
 (define-c-struct (sdl-pixel-format "SDL_PixelFormat")
@@ -269,6 +272,39 @@
   (let ((err ((foreign-lambda int "SDL_GL_SetAttribute" int int) attr value)))
     (or (zero? err)
         (error "SDL_GL_SetAttribute" (sdl-get-error)))))
+
+(define (sdl-gl-create-context window)
+  (let ((glcontect ((foreign-lambda SDL-GLContext "SDL_GL_CreateContext" SDL-Window)
+                    (c-struct->pointer window sdl-window))))
+    (if glcontect
+      (pointer->c-struct glcontect sdl-glcontext)
+      (error "SDL_GL_CreateContext" (sdl-get-error)))))
+
+(define (sdl-gl-delete-context glcontext)
+  ((foreign-lambda void "SDL_GL_DeleteContext" SDL-GLContext)
+   (c-struct->pointer glcontext sdl-glcontext)))
+
+(define (sdl-gl-make-current window glcontext)
+  (let ((err ((foreign-lambda int "SDL_GL_MakeCurrent" SDL-Window SDL-GLContext)
+              (c-struct->pointer window sdl-window)
+              (c-struct->pointer glcontext sdl-glcontext))))
+    (or (zero? err)
+        (error "SDL_GL_MakeCurrent" (sdl-get-error)))))
+
+(define (sdl-gl-set-swap-interval interval)
+  (let ((err ((foreign-lambda int "SDL_GL_SetSwapInterval" int) interval)))
+    (or (zero? err)
+        (error "SDL_GL_SetSwapInterval" (sdl-get-error)))))
+
+(define (sdl-gl-get-swap-interval)
+  (let ((interval ((foreign-lambda int "SDL_GL_GetSwapInterval"))))
+    (if (negative? interval)
+      (error "SDL_GL_GetSwapInterval" (sdl-get-error))
+      interval)))
+
+(define (sdl-gl-swap-window window)
+  ((foreign-lambda void "SDL_GL_SwapWindow" SDL-Window)
+   (c-struct->pointer window sdl-window)))
 
 (define SDL-WINDOWPOS-CENTERED (foreign-value "SDL_WINDOWPOS_CENTERED" int))
 (define SDL-WINDOWPOS-UNDEFINED (foreign-value "SDL_WINDOWPOS_UNDEFINED" int))
